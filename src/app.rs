@@ -8,15 +8,18 @@ pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 pub struct App {
     /// Is the application running?
     pub running: bool,
-    /// counter
-    pub counter: u8,
+    /// bottom command line
+    pub command_line: String,
+    /// cursor position
+    pub cursor: usize,
 }
 
 impl Default for App {
     fn default() -> Self {
         Self {
             running: true,
-            counter: 0,
+            command_line: String::new(),
+            cursor: 0,
         }
     }
 }
@@ -35,15 +38,31 @@ impl App {
         self.running = false;
     }
 
-    pub fn increment_counter(&mut self) {
-        if let Some(res) = self.counter.checked_add(1) {
-            self.counter = res;
+    pub fn press_char(&mut self, key: char) {
+        self.command_line.insert_str(self.cursor, &key.to_string());
+        self.rightwards_cursor();
+    }
+
+    pub fn backspace_char(&mut self) {
+        self.command_line.remove(self.cursor - 1);
+        self.leftwards_cursor();
+    }
+
+    pub fn delete_char(&mut self) {
+        if self.cursor < self.command_line.len() {
+            self.command_line.remove(self.cursor);
         }
     }
 
-    pub fn decrement_counter(&mut self) {
-        if let Some(res) = self.counter.checked_sub(1) {
-            self.counter = res;
+    pub fn rightwards_cursor(&mut self) {
+        if let Some(cursor) = self.cursor.checked_add(1) {
+            self.cursor = cursor;
+        }
+    }
+
+    pub fn leftwards_cursor(&mut self) {
+        if let Some(cursor) = self.cursor.checked_sub(1) {
+            self.cursor = cursor;
         }
     }
 }

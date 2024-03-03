@@ -1,7 +1,8 @@
 use ratatui::{
-    layout::Alignment,
+    layout::{Alignment, Constraint, Direction, Layout},
     style::{Color, Style},
-    widgets::{Block, BorderType, Paragraph},
+    text::{Line, Text},
+    widgets::{Block, BorderType, Borders, Paragraph},
     Frame,
 };
 
@@ -13,22 +14,26 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     // See the following resources:
     // - https://docs.rs/ratatui/latest/ratatui/widgets/index.html
     // - https://github.com/ratatui-org/ratatui/tree/master/examples
-    frame.render_widget(
-        Paragraph::new(format!(
-            "This is a tui template.\n\
-                Press `Esc`, `Ctrl-C` or `q` to stop running.\n\
-                Press left and right to increment and decrement the counter respectively.\n\
-                Counter: {}",
-            app.counter
-        ))
-        .block(
-            Block::bordered()
-                .title("Template")
-                .title_alignment(Alignment::Center)
-                .border_type(BorderType::Rounded),
-        )
-        .style(Style::default().fg(Color::Cyan).bg(Color::Black))
-        .centered(),
-        frame.size(),
+    let layout = Layout::new(
+        Direction::Vertical,
+        [Constraint::Min(1), Constraint::Max(3)],
     )
+    .split(frame.size());
+    let output_layout = layout[0];
+    let input_layout = layout[1];
+
+    let output = Block::new();
+    let history_layout = output.inner(output_layout);
+    let history = Text::default();
+
+    let input = Block::new()
+        .borders(Borders::all())
+        .border_type(BorderType::Rounded);
+    let command_layout = input.inner(input_layout);
+    let command = Line::raw(&app.command_line);
+
+    frame.render_widget(output, output_layout);
+    frame.render_widget(input, input_layout);
+    frame.render_widget(command, command_layout);
+    frame.render_widget(history, history_layout);
 }

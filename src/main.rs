@@ -2,9 +2,9 @@ use commander::app::{App, AppResult};
 use commander::event::{Event, EventHandler};
 use commander::handler::handle_key_events;
 use commander::tui::Tui;
-use std::io;
 use ratatui::backend::CrosstermBackend;
 use ratatui::Terminal;
+use std::io;
 
 #[tokio::main]
 async fn main() -> AppResult<()> {

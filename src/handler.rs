@@ -5,23 +5,30 @@ use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
     match key_event.code {
         // Exit application on `ESC` or `q`
-        KeyCode::Esc | KeyCode::Char('q') => {
+        KeyCode::Esc => {
             app.quit();
         }
-        // Exit application on `Ctrl-C`
-        KeyCode::Char('c') | KeyCode::Char('C') => {
-            if key_event.modifiers == KeyModifiers::CONTROL {
-                app.quit();
-            }
+
+        KeyCode::Backspace => {
+            app.backspace_char();
         }
-        // Counter handlers
-        KeyCode::Right => {
-            app.increment_counter();
+
+        KeyCode::Delete => {
+            app.delete_char();
         }
+
+        KeyCode::Char(key) => {
+            app.press_char(key);
+        }
+
         KeyCode::Left => {
-            app.decrement_counter();
+            app.leftwards_cursor();
         }
-        // Other handlers you could add here.
+
+        KeyCode::Right => {
+            app.rightwards_cursor();
+        }
+
         _ => {}
     }
     Ok(())
