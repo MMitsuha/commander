@@ -1,6 +1,6 @@
 use commander::app::{App, AppResult};
 use commander::event::{Event, EventHandler};
-use commander::handler::handle_key_events;
+use commander::handler::{handle_key_events, handle_mouse_events};
 use commander::tui::Tui;
 use ratatui::backend::CrosstermBackend;
 use ratatui::Terminal;
@@ -26,7 +26,7 @@ async fn main() -> AppResult<()> {
         match tui.events.next().await? {
             Event::Tick => app.tick(),
             Event::Key(key_event) => handle_key_events(key_event, &mut app)?,
-            Event::Mouse(_) => {}
+            Event::Mouse(mouse_event) => handle_mouse_events(mouse_event, &mut app)?,
             Event::Resize(_, _) => {}
         }
     }
