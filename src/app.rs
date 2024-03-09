@@ -1,6 +1,6 @@
 use crossterm::event::KeyEvent;
 use ratatui::{
-    style::{Style, Stylize},
+    style::Style,
     widgets::{Block, BorderType, Borders},
 };
 use std::error;

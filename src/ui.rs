@@ -1,8 +1,5 @@
 use ratatui::{
-    layout::{Alignment, Constraint, Direction, Layout},
-    style::{Color, Style},
-    text::{Line, Text},
-    widgets::{Block, BorderType, Borders, Padding, Paragraph},
+    layout::{Constraint, Direction, Layout},
     Frame,
 };
 
